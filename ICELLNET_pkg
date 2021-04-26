@@ -1,0 +1,26 @@
+#"grid" cannot be loaded
+install.packages(c("devtools", "jetset", "readxl", "psych", "GGally", "gplots","ggplot2", "RColorBrewer", "data.table", "gridExtra","ggthemes", "scales","rlist"))
+
+BiocManager::install(version = "3.12") #updated new version of BiocManager for org.Hs.eg.db and hgu133plus2.db
+
+if (!requireNamespace("BiocManager", quietly = TRUE)) # Installs Bioconductor dependancies 
+install.packages("BiocManager")
+BiocManager::install(c("BiocGenerics", "org.Hs.eg.db", "hgu133plus2.db", "annotate"))
+
+
+library(devtools)
+install_github("soumelis-lab/ICELLNET",ref="master", subdir="icellnet")
+
+#loading dependencies
+library(BiocGenerics)
+library("hgu133plus2.db")
+library("org.Hs.eg.db")
+library(jetset)
+library(ggplot2)
+library(dplyr)
+library(gridExtra)
+library(icellnet)
+
+#db of ligand receptor
+db=as.data.frame(read.csv(curl::curl(url="https://raw.githubusercontent.com/soumelis-lab/ICELLNET/master/data/ICELLNETdb.tsv"), sep="\t",header = T, check.names=FALSE, stringsAsFactors = FALSE, na.strings = ""))
+head(db)
