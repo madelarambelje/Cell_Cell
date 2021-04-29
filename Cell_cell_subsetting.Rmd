@@ -1,0 +1,157 @@
+---
+title: "Cell_Subsetting"
+author: "Andre de la Rambelje"
+date: "4/20/2021"
+output:
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r Libraries, echo=TRUE}
+library("Seurat")
+library("Matrix")
+library(ggplot2)
+```
+
+```{r Loading Smillie & Merging, echo=TRUE}
+# Loading smillie preprocessed
+epi.seur <- readRDS('train.Epi.seur.rds')
+fib.seur <- readRDS('train.Fib.seur.rds')
+imm.seur <- readRDS('train.Imm.seur.rds')
+# Merging all celltypes
+all.counts <- merge(epi.seur, 
+                    y= c(fib.seur, imm.seur),
+                    add.cell.ids = c("epi", "fib", "imm"))
+#Setting Identity to Health
+Idents(all.counts) <- "Health"
+table(Idents(all.counts))
+healthy.counts <- subset(all.counts, idents = "Healthy")
+celltype.frequency.healthy <- table(Idents(healthy.counts))
+
+```
+
+```{r Extracting Celltypes, echo=TRUE}
+# Extracting Frequency Celltypes
+frequency.all.celltypes <-table(healthy.counts@meta.data$Cluster)
+#Setting Identity to Clusters(Celltypes)
+Idents(healthy.counts) <- "Cluster"
+#Cells to use
+cells.to.use <- c("CD4+ Memory", "Plasma", "Enterocytes", "Macrophages", "WNT2B+ Fos-hi")
+# Performing idents is used to select our selected celltypes
+filtered.cells <- subset(healthy.counts, idents =cells.to.use)
+freq.wanted.celltypes <- table(Idents(filtered.cells))
+#Calculating percentage of celltypes
+table.real.frac <-  as.data.frame(table(Idents(filtered.cells))
+                                  / sum(table(Idents(filtered.cells))))
+colnames(table.real.frac) <- c("Celltypes", "Freq")
+
+```
+
+```{r Subsetting uniform, echo=TRUE}
+method1.cells <- subset(healthy.counts, idents =cells.to.use,downsample=1000)
+
+length(unique(colnames(method1.cells)))
+
+saveRDS(method1.cells, "Subsets_Smillie/uniform_subset.rds")
+
+```
+
+
+```{r Method 2: Subsetting Conserving Natural Composition, echo=TRUE}
+
+# SAMPLING NUMBER DEFINED BY https://satijalab.org/howmanycells/
+# With N=Celltypes; F=Minimum fraction of rarest celltype; C=Minimum desired cells per type
+# N=5; F=0.05507996; C=200 
+natural.composition.subset2.0 <- filtered.cells[,sample(colnames(filtered.cells), size = 3632)]
+
+#Viewing if composition is ~ same
+table_seurat_subset_natural <-  as.data.frame(table(Idents(natural.composition.subset2.0))
+                                              / sum(table(Idents(natural.composition.subset2.0))))
+colnames(table_seurat_subset_natural) <- c("Celltypes", "Freq")
+
+
+saveRDS(natural.composition.subset2.0, "Subsets_Smillie/natural_composition_subset.rds")
+```
+## FUNCTION BELOW NOT USED
+```{r Method 2.1: Function Creating Natural Subset, echo=TRUE}
+
+#This function creates a subset of filtered cells conserving the 
+# natural composition, and only works with 5 cell types
+subset_natural_distribution <- 
+  function(freq.table, cells, seurat.object,minimum_cell_freq){
+    #Extract minimum cell name
+  min.name <- names(freq.table[which.min(freq.table)])
+    #Making denominator for calculation fraction
+  denominator <- freq.wanted.celltypes[which.min(freq.wanted.celltypes)][[1]]
+    #Generating empty df list for appending seurat objects later
+  list.generated.dfs <- list()
+    #Setting required cell number for minimum celltype
+  sample.freq <- minimum_cell_freq
+    #Creating sampling fraction
+  sampling.fraction <- sample.freq/denominator
+  for (cell in cells)
+    #Extracting frequenty of celltype
+  { freq.cell <- freq.table[cell]
+    #Check if cell is the minimum frequency
+    if (cell == min.name){
+    #Generating subset for least present cell  
+    min_subset <- subset(seurat.object, downsample=minimum_cell_freq,idents=cell)
+    #Storing to df list
+    list.generated.dfs[[cell]] <- min_subset
+    #If cell is not minimum a fraction is taken by multiplying 
+    # the cellfraction with the frequency of the respective celltype
+    } else { 
+      sample.freq <- sampling.fraction * freq.cell
+      df.to_append <- subset(seurat.object, downsample=round(sample.freq),idents=cell)
+      list.generated.dfs[[cell]] <- df.to_append
+      
+      }
+  }
+  # Removing names from df list
+  names(list.generated.dfs) <- NULL
+  # Converting to vector
+  vector <- unlist(list.generated.dfs)
+  # Extracting seurat objects from vector
+  object1 <- vector[[1]]
+  object2 <- vector[[2]]
+  object3 <- vector[[3]]
+  object4 <- vector[[4]]
+  object5 <- vector[[5]]
+  #Making y-variable for merge function
+  y <- c(object2,object3,object4,object5)
+  # Merging all seurat objects
+  natural.composition.subset <- merge(object1, y=y)
+  return(natural.composition.subset)}
+
+subset.natural.dist.2.1 <- subset_natural_distribution(freq.table = freq.wanted.celltypes, 
+                            cells = cells.to.use, 
+                            seurat.object = filtered.cells, 
+                            minimum_cell_freq = 200)
+
+#Viewing if composition is ~ same
+table_custom_subset_natural <- as.data.frame(table(Idents(subset.natural.dist.2.1))/ 
+                                               sum(table(Idents(subset.natural.dist.2.1))))
+colnames(table_custom_subset_natural) <- c("Celltypes", "Freq")
+
+
+merged_freq <- merge(table_custom_subset_natural, 
+                     c(table_seurat_subset_natural, table.real.frac), by="Celltypes")
+rownames(merged_freq) = merged_freq[,"Celltypes"]
+merged_freq <- merged_freq[,c("Freq.x", "Freq.y", "Freq.1")]
+colnames(merged_freq) <- c("Custom","Seurat", "Real")
+merged_freq <-round(merged_freq,3)
+merged_freq[,c("Real", "Custom", "Seurat")]
+```
+
+```{r Subset Shixuan Method}
+
+# Creating Seurat object with only T-cells
+selection.Tcells <- subset(healthy.counts, idents = "CD4+ Memory")
+saveRDS(selection.Tcells, "Subsets_Smillie/t_cell_subset.rds")
+
+```
+
