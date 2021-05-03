@@ -81,19 +81,98 @@ gg4 <- netVisual_heatmap(cellchat, measure = "weight")
 gg3 + gg4
 
 
-
+# Identify signaling networks with larger (or less) difference as well as 
+# signaling groups based on their functional similarity
+#Reset cellchat object
+#object.list <- list(healthy = cellchat_healthy, inflamed = cellchat_inflamed)
+#cellchat <- mergeCellChat(object.list, add.names = names(object.list))
+#
 cellchat <- computeNetSimilarityPairwise(cellchat, type = "functional")
 #> Compute signaling network similarity for datasets 1 2
 cellchat <- netEmbedding(cellchat, type = "functional")
-#----------
 #> Manifold learning of the signaling networks for datasets 1 2
 cellchat <- netClustering(cellchat, type = "functional")
 #> Classification learning of the signaling networks for datasets 1 2
 # Visualization in 2D-space
 netVisual_embeddingPairwise(cellchat, type = "functional", label.size = 3.5)
 #> 2D visualization of signaling networks from datasets 1 2
-#-----
 
 
+# Identify signaling groups based on structure similarity
+cellchat <- computeNetSimilarityPairwise(cellchat, type = "structural")
+#> Compute signaling network similarity for datasets 1 2
+cellchat <- netEmbedding(cellchat, type = "structural")
+#> Manifold learning of the signaling networks for datasets 1 2
+cellchat <- netClustering(cellchat, type = "structural")
+#> Classification learning of the signaling networks for datasets 1 2
+# Visualization in 2D-space
+netVisual_embeddingPairwise(cellchat, type = "structural", label.size = 3.5)
+#> 2D visualization of signaling networks from datasets 1 2
+netVisual_embeddingPairwiseZoomIn(cellchat, type = "structural", nCol = 2)
+#> 2D visualization of signaling networks from datasets 1 2
+
+rankSimilarity(cellchat, type = "functional")
+#> Compute the distance of signaling networks between datasets 1 2
+
+#Identify and visualize the conserved and context-specific signaling pathways
+#Compare the overall information flow of each signaling pathway
+gg5 <- rankNet(cellchat, mode = "comparison", stacked = T, do.stat = TRUE)
+gg6 <- rankNet(cellchat, mode = "comparison", stacked = F, do.stat = TRUE)
+gg5 + gg6
+
+
+#Part III: Identify the upgulated and down-regulated signaling ligand-receptor pairs
+#Identify dysfunctional signaling by comparing the communication probabities
+#Reset cellchat object
+#object.list <- list(healthy = cellchat_healthy, inflamed = cellchat_inflamed)
+#cellchat <- mergeCellChat(object.list, add.names = names(object.list))
+netVisual_bubble(cellchat, sources.use = 5, targets.use = c(0:100),  
+                 comparison = c(1, 2), angle.x = 45)
+#> Comparing communications on a merged object
+
+gg7 <- netVisual_bubble(cellchat, sources.use = 4, targets.use = c(0:100),  
+                        comparison = c(1, 2), max.dataset = 2, 
+                        title.name = "Increased signaling in LS", 
+                        angle.x = 45, remove.isolate = T)
+gg8 <- netVisual_bubble(cellchat, sources.use = 4, targets.use = c(0:100),  
+                        comparison = c(1, 2), max.dataset = 1, 
+                        title.name = "Decreased signaling in LS", 
+                        angle.x = 45, remove.isolate = T)
+#> Comparing communications on a merged object
+gg7 + gg8
+
+
+###
+#PATHWAYS
+###
+cellchat@netP[["healthy"]][["pathways"]]
+cellchat@netP[["inflamed"]][["pathways"]]
+pathways.show <- c("LAMININ") 
+
+#Circleplot
+weight.max <- getMaxWeight(object.list, 
+                           slot.name = c("netP"), 
+                           attribute = pathways.show) # control the edge weights across different datasets
+par(mfrow = c(1,2), xpd=TRUE)
+for (i in 1:length(object.list)) {
+  netVisual_aggregate(object.list[[i]], signaling = pathways.show, 
+                      layout = "circle", edge.weight.max = weight.max[1], 
+                      edge.width.max = 10, signaling.name = paste(pathways.show, 
+                                                                  names(object.list)[i]))
+}
+#Heatmap
+par(mfrow = c(1,2), xpd=TRUE)
+ht <- list()
+for (i in 1:length(object.list)) {
+  ht[[i]] <- netVisual_heatmap(object.list[[i]], signaling = pathways.show, color.heatmap = "Reds",title.name = paste(pathways.show, "signaling ",names(object.list)[i]))
+}
+ComplexHeatmap::draw(ht[[1]] + ht[[2]], ht_gap = unit(0.5, "cm"))
+
+
+#Part V: Compare the signaling gene expression distribution between different datasets
+#plot the gene expression distribution of signaling genes related to L-R pairs or signaling pathway using a Seurat wrapper function
+####
+cellchat@meta$datasets = factor(cellchat@meta$datasets, levels = c("healthy", "inflamed")) # set factor level
+plotGeneExpression(cellchat, signaling = pathways.show, split.by = "datasets", colors.ggplot = T)
 
 
