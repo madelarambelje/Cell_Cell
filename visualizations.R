@@ -1,4 +1,6 @@
-#Visualizations: 
+# This script generates functions to call to visualize the merged cellchat object 
+# Nick Veltmaat
+# 16-5-2021
 
 # Part I: Predict general principles of cell-cell communication
 # Compare the total number of interactions and interaction strength
