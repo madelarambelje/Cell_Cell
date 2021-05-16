@@ -1,6 +1,7 @@
 # Run this script:
 # Nick Veltmaat
 # 15-5-2021
+
 # In this example, an Inflamed and Healthy subset from Smillie's data (https://github.com/cssmillie/ulcerative_colitis)
 # with natural cell compositions will be compared using CellChat (https://github.com/sqjin/CellChat)
 setwd('~/Desktop/Master Files/Cell_Cell_Project/Cellchat')
@@ -9,18 +10,21 @@ setwd('~/Desktop/Master Files/Cell_Cell_Project/Cellchat')
 source('Vignette/requisites.R')
 
 
-
 # Give the script the Seurat objects that you want to compare / analyze
 subset1 <- readRDS('Vignette/data/healthy_subset_natural.rds') # E.g. Healthy subset
 subset2 <- readRDS('Vignette/data/inflamed_subset_natural.rds') # E.g. Inflamed subset
 
 
+# Select which database to use: (Either "CellChat" or "ICELLNET")
+DB <- "ICELLNET"
+#DB <- "CellChat"
+
 
 # Create Cellchat Objects (takes time)
 source('Vignette/create_cellchat_objects.R')
-## OR LOAD CELLCHAT OBJECTS FROM RDS to skip line above:
-# subset1 <- readRDS("cellchat1.rds")
-# subset2 <- readRDS("cellchat2.rds")
+## OR LOAD CELLCHAT OBJECTS FROM RDS to skip line above (loaded w/ CellChatDB):
+#subset1 <- readRDS("cellchat1.rds")
+#subset2 <- readRDS("cellchat2.rds")
 
 ### Merge Cellchat objects, set condition for subsets: (Replace Healthy / Inflamed as preferred)
 object.list <- list(Healthy = cellchat1, 
@@ -30,12 +34,11 @@ cellchat <- mergeCellChat(object.list,
 cellchat
 
 
-
 # Identify the conserved and context-specific signaling pathways
 source('Vignette/similarity.R')
 
 # Save merged cellchatfile as RDS:
-# saveRDS(cellchat, file = "merged_cellchat.rds")
+saveRDS(cellchat, file = "merged_cellchat_ICELLNETDB.rds")
 
 # Skip all previous code by loading merged cellchat object RDS file:
 # cellchat <- readRDS("merged_cellchat.rds")
@@ -88,3 +91,8 @@ PLOT.pathway.chord(i = 1, pathways.show = pathways.show)
 
 ## PART V
 PLOT.expression.distribution(x = cellchat, pathways.show = pathways.show)
+
+
+
+
+
