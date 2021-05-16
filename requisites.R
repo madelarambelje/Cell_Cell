@@ -1,4 +1,7 @@
 # Install / Load required packages for cellchat analysis
+# Nick Veltmaat
+# 16-5-2021
+
 install.packages('pacman')
 install.packages('BiocManager')
 
