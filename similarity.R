@@ -1,5 +1,9 @@
 # Identify signaling networks with larger (or less) difference as well as 
 # signaling groups based on their functional similarity
+# Nick Veltmaat
+# 16-5-2021
+
+
 cellchat <- computeNetSimilarityPairwise(cellchat, type = "functional")
 #> Compute signaling network similarity for datasets 1 2
 
