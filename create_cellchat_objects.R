@@ -1,8 +1,10 @@
-#Create CellChat objects from given subsets:
+# Create CellChat objects from given subsets:
+# Nick Veltmaat
+# 16-5-2021
 
 # Convert Seurat to Cellchat Objects
-cellchat1 <- createCellChat(object = subset1, group.by = "ident") # E.g. Healthy subset
-cellchat2 <- createCellChat(object = subset2, group.by = "ident") # E.g. Inflamed subset
+cellchat1 <- createCellChat(object = subset1, group.by = "Cluster") # E.g. Healthy subset
+cellchat2 <- createCellChat(object = subset2, group.by = "Cluster") # E.g. Inflamed subset
 
 # Subset 1 (Healthy subset):
 cellchat1 <- setIdent(cellchat1, ident.use = "Cluster") # set "labels" as default cell identity
@@ -13,16 +15,13 @@ cellchat2 <- setIdent(cellchat2, ident.use = "Cluster") # set "labels" as defaul
 levels(cellchat2@idents) # show factor levels of the cell labels
 groupSize_subset2 <- as.numeric(table(cellchat2@idents)) # number of cells in each cell group
 
-# Set database / reference
-CellChatDB <- CellChatDB.human # use CellChatDB.mouse if running on mouse data
-showDatabaseCategory(CellChatDB)
-cellchat1@DB <- CellChatDB    #Set DB for Healthy Subset 1
-cellchat2@DB <- CellChatDB   #Set DB for Inflamed Subset 2
+# RUN DATABASE.R to load either the original CellChatDB or the ICELLNET based DB
+source('Vignette/database.R')
 
 # Compute Interactions:
 #### (Healthy) subset 1:
 cellchat1 <- subsetData(cellchat1) # subset the expression data of signaling genes for saving computation cost
-future::plan("multiprocess", workers = 16) # do parallel
+future::plan("multiprocess", workers = 8) # do parallel
 cellchat1 <- identifyOverExpressedGenes(cellchat1)
 cellchat1 <- identifyOverExpressedInteractions(cellchat1)
 cellchat1 <- projectData(cellchat1, PPI.human)
@@ -36,7 +35,7 @@ saveRDS(cellchat1, file = "cellchat1.rds")
 # Compute Interactions:
 #### (Inflamed) subset 2:
 cellchat2 <- subsetData(cellchat2) # subset the expression data of signaling genes for saving computation cost
-future::plan("multiprocess", workers = 16) # do parallel
+future::plan("multiprocess", workers = 8) # do parallel
 cellchat2 <- identifyOverExpressedGenes(cellchat2)
 cellchat2 <- identifyOverExpressedInteractions(cellchat2)
 cellchat2 <- projectData(cellchat2, PPI.human)
