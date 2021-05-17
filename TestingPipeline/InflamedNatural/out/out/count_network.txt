@@ -1,0 +1,26 @@
+SOURCE	TARGET	count
+Enterocytes	Enterocytes	52
+Enterocytes	WNT2B+ Fos-hi	66
+Enterocytes	CD4+ Memory	8
+Enterocytes	Plasma	22
+Enterocytes	Macrophages	51
+WNT2B+ Fos-hi	Enterocytes	66
+WNT2B+ Fos-hi	WNT2B+ Fos-hi	15
+WNT2B+ Fos-hi	CD4+ Memory	4
+WNT2B+ Fos-hi	Plasma	8
+WNT2B+ Fos-hi	Macrophages	28
+CD4+ Memory	Enterocytes	8
+CD4+ Memory	WNT2B+ Fos-hi	4
+CD4+ Memory	CD4+ Memory	0
+CD4+ Memory	Plasma	2
+CD4+ Memory	Macrophages	3
+Plasma	Enterocytes	22
+Plasma	WNT2B+ Fos-hi	8
+Plasma	CD4+ Memory	2
+Plasma	Plasma	4
+Plasma	Macrophages	18
+Macrophages	Enterocytes	51
+Macrophages	WNT2B+ Fos-hi	28
+Macrophages	CD4+ Memory	3
+Macrophages	Plasma	18
+Macrophages	Macrophages	14
