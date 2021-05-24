@@ -1,0 +1,36 @@
+install.packages("pacman")
+pacman::p_load(devtools, curl, jetset, readxl, psych, GGally, gplots, ggplot2, RColorBrewer, data.table, gridExtra, ggthemes, scales, rlist, Seurat) 
+
+if (!requireNamespace("BiocManager", quietly = TRUE)) # Installs Bioconductor dependancies 
+  install.packages("BiocManager")
+BiocManager::install(c("BiocGenerics", "org.Hs.eg.db", "hgu133plus2.db", "annotate"))
+
+library(devtools)
+install_github("soumelis-lab/ICELLNET",ref="master", subdir="icellnet")
+
+library(BiocGenerics)
+library("org.Hs.eg.db")
+library("hgu133plus2.db")
+library(jetset)
+library(ggplot2)
+library(dplyr)
+library(icellnet)
+library(gridExtra)
+library(Seurat)
+
+install.packages("Seurat")
+
+#Icellnet db
+db=as.data.frame(read.csv(curl::curl(url="https://raw.githubusercontent.com/soumelis-lab/ICELLNET/master/data/ICELLNETdb.tsv"), sep="\t",header = T, check.names=FALSE, stringsAsFactors = FALSE, na.strings = ""))
+
+#Central cell file
+data=as.data.frame(read.table(curl::curl(url="https://raw.githubusercontent.com/soumelis-lab/ICELLNET/master/data_CAF/data_CAF.txt"), sep="\t", header = T))
+#Target Cell
+CC.target = as.data.frame(read.table(curl::curl(url="https://raw.githubusercontent.com/soumelis-lab/ICELLNET/master/data_CAF/target_CAF.txt"),sep = "\t",header=T))
+# converting Symbols as rownames 
+rownames(data) <- data$SYMBOL
+data$SYMBOL <- NULL #remove first row
+
+data.seurat <- CreateSeuratObject(counts=data)
+data.seurat@meta.data$Cluster <- CC.target$Cancer.subtype
+saveRDS(data.seurat, "~/Downloads/data_CAF1.rds")
