@@ -1,6 +1,0 @@
-	all_sum
-Enterocytes	199
-WNT2B+ Fos-hi	121
-CD4+ Memory	17
-Plasma	54
-Macrophages	114
