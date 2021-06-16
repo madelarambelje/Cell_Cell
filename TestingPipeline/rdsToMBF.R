@@ -30,7 +30,8 @@ write.table(features.to.save, paste0(args[1],"/","features.tsv"), sep = "\t", ro
 
 # Saving metadata
 meta.data.to.save <- subset.to.tear@meta.data
-meta.data.to.save[,10] <- rownames(meta.data.to.save) 
-colnames(meta.data.to.save) <- NULL
-write.csv(meta.data.to.save[,c(10,6)], paste0(args[1],"/","metadata.csv"), row.names = FALSE, col.names = F)
+meta.data.to.save$Barcodes <- rownames(meta.data.to.save)
+meta.B.C <- meta.data.to.save[,c("Barcodes","Cluster")]
+colnames(meta.B.C) <- NULL
+write.csv(meta.B.C, paste0(args[1],"/","metadata.csv"), row.names = F)
 
