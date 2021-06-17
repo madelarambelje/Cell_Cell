@@ -1,3 +1,5 @@
+# Author: Andre de la Rambelje
+
 library("Seurat")
 
 setwd("/students/2020-2021/master/CellPhoneDB/")
