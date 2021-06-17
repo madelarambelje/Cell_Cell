@@ -65,6 +65,7 @@ Move to the directory this script is stored in.
 ```{bash, eval=FALSE}
 cd Cell_Cell/
 git checkout andre
+cd PipelineCPDB/
 chmod u=rx RunCPDB.sh
 ./RunCPDB.sh OutputDirName seurat_object.rds number_of_threads
 ```
