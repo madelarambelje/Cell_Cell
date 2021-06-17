@@ -1,10 +1,13 @@
+# This script generates a network and a heatmap
+# Author: Andre de la Rambelje
+
 library(igraph)
 library(RColorBrewer)
 library(matrixStats)
 library(ggplot2)
 library(scAI)
 
-setwd("/students/2020-2021/master/CellPhoneDB/TestingPipeline/CellChat/out/out/")
+setwd("HEATMAP OUTPUT PATH")
 
 # Loading in Network
 network = read.csv("count_network.txt", sep = "\t", header = TRUE)
@@ -21,8 +24,7 @@ coords <- layout_(g, in_circle())
 edge.start <- ends(g, es = E(g), names = F)
 
 
-# This code section is pretty advanced, cannot really say whats happening here.
-# This code adjusts the label position.
+# This code section is pretty advanced for a minor detail, this code basically adjusts the label position.
 if(nrow(coords)!=1){
   coords_scale=scale(coords)
 }else{
