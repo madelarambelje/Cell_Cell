@@ -1,4 +1,4 @@
-# This script generates a network and a heatmap
+# This script generates a network and a heatmap using output from cellphonedb heatmap function
 # Author: Andre de la Rambelje
 
 library(igraph)
