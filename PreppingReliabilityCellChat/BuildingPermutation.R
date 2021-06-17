@@ -1,3 +1,5 @@
+# Author: Andre de la Rambelje
+
 library("Seurat")
 seurat.for.genes <- readRDS("/students/2020-2021/master/CellPhoneDB/TestingPipeline/CellChat_TutorialData_SeuratObject.rds")
 seurat.for.cells <- readRDS("/students/2020-2021/master/CellPhoneDB/TestingPipeline/CellChat_TutorialData_SeuratObject.rds")
