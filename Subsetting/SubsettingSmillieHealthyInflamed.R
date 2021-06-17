@@ -1,3 +1,6 @@
+# This scripts makes subsets inflamed and healthy from smillie data
+# AUTHOR Andre de la Rambelje
+
 setwd("~/Desktop/ulcerative_colitus")
 library("Seurat")
 library("Matrix")
