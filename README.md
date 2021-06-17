@@ -19,6 +19,12 @@ Article: [Tutorial data retrieved from Arazi, et., Nature Immunology 2019](https
 
 To acces this data, permission is required from the author.
 
+
+### Ulcerative Colitus
+In this study data additional data is used from [Smillie et al., CellPress 2019](https://pubmed.ncbi.nlm.nih.gov/31348891/), however this data is not further used in the article written.
+
+Actual link to Data: [Smillie Data](https://www.dropbox.com/sh/dn4gwdww8pmfebf/AACXYu8rda5LoLwuCZ8aZXfma?dl=0)
+
 ### Comparing 
 These tools were tested on their capability in showing relevant results using their visualization options.
 Tutorial or article data provided by these tools were used interchangeably on each of the tools, to validate if the tools are able to replicate their results. 
