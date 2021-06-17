@@ -1,0 +1,201 @@
+---
+author: "Andre de la Rambelje"
+title: "Vignette CellPhoneDB"
+output:
+  html_document: default
+  pdf_document: default
+---
+This document contains a vignette of the usage of CellPhoneDB. CellPhoneDB predicts cell-cell interactions using permutation testing. This package is written in python and runs via the commandline. Terminals makes users often scared, nevertheless it is incredibly powerfull and efficient. Here, we will demonstrate how to use cellphonedb in the terminal.
+
+```{css, echo=FALSE}
+.badCode {
+background-color: black;
+}
+```
+## Installation
+First, lets clone the repository, if you have already done that, skip this codechunk.
+```{bash , eval=F}
+git clone https://github.com/madelarambelje/Cell_Cell.git
+```
+
+Now, we have to check which python version is used. CellPhoneDB works only with python versions => 3.6
+```{bash, include=TRUE, eval=FALSE}
+python3 --version
+```
+If your python version < 3.6, you can create a virtual environment using conda to create an updated python version. You can download miniconda or anaconda. In this example we will use miniconda, because this installs less initial packages.
+
+Go to https://docs.conda.io/en/latest/miniconda.html and download a version > 3.7 .  Give the user 
+```{bash, include = TRUE, eval=FALSE}
+chmod u=wx Miniconda3-latest-Linux-x86_64.sh 
+```
+Run this bash file for the installation of miniconda.
+```{bash, include= TRUE, eval=FALSE}
+./Miniconda3-latest-Linux-x86_64.sh 
+```
+After this installation make a virtual environment with previous installed miniconda, and set the python version > 3.6.
+```{bash, eval=FALSE}
+conda create --name cellphonedb_env python=3.7
+```
+
+We can install cellphonedb using pip in the environment created previously.
+```{bash, eval=FALSE}
+pip3 install cellphonedb
+```
+
+## Preprocessing
+#### Changing cell label column name to "Cluster"
+CellphoneDB is now ready to be used, however we have to do some preprocessing to run the actual analysis 
+```{r, eval=FALSE}
+seurat.object <- readRDS("PATH_TO_SEURAT_OBJECT.rds")
+# Check which Column index contains the cell labels
+head(seurat.object@meta.data)
+# If name is not Cluster change it to Cluster
+colnames(seurat.object@meta.data)[6] <- "Cluster"
+# Save this file
+setwd("~")
+saveRDS(seurat.object, "seurat_adj_col.rds")
+```
+## Run Analysis CellPhoneDB
+Now we are ready to run the analysis using the 'RunCPDB.sh' script. * This script requires three inputs:    
+  1.    Output directory name   
+  2.    Seurat object saved as rds     
+  3.    Amount of threads to use    
+
+Move to the directory this script is stored in.
+```{bash, eval=FALSE}
+cd Cell_Cell/
+git checkout andre
+chmod u=rx RunCPDB.sh
+./RunCPDB.sh OutputDirName seurat_object.rds number_of_threads
+```
+## Generating Visualizations
+Check the output, go to OutputDirName/out/out, here a heatmap is build by cellphonedb, however, this figure can be misleading due to the colors used. Therefore we create our own.
+```{bash, eval=FALSE}
+cd OuputDirName/out/out 
+```
+
+First install the prerequisites. Open a R console and run the code below.
+```{r, eval=FALSE}
+install.packages('pacman')
+install.packages('BiocManager')
+pacman::p_load(igraph, RColorBrewer,matrixStats ,ggplot2, Seurat,scAI)
+```
+
+Now we create our own heatmap! Load the count_network data.
+```{r, eval=FALSE}
+network = read.csv("/students/2020-2021/master/CellPhoneDB/TestingPipeline/ResultsPipeline/CellChat/out/out/count_network.txt", sep = "\t", header = TRUE)
+```
+### Heatmap log(counts)
+We can either make heatmap with log(count) or with the raw counts.
+The code below makes a log(count) heatmap
+```{r eval=FALSE}
+ggplot(network, aes(x=SOURCE, y=TARGET, fill=log(count))) + 
+  geom_tile() +scale_fill_gradient(low = "white", high = "steelblue") + 
+  ggtitle("Number of Interactions Cell to Cell")+
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"),
+        axis.title.x=element_blank(),
+        axis.text.x = element_text(angle =45,hjust=1),
+        axis.title.y= element_blank())
+```
+```{r, echo=FALSE}
+# Define variable containing url
+url <- "https://raw.githubusercontent.com/madelarambelje/Cell_Cell/andre/heatmap.png"
+```
+
+![](`r url`)
+
+### Heatmap Raw counts
+Here, a heatmap is generated using the raw counts.
+```{r eval=FALSE}
+ggplot(network, aes(x=SOURCE, y=TARGET, fill=count)) + 
+  geom_tile() +scale_fill_gradient(low = "white", high = "steelblue") + 
+  ggtitle("Number of Interactions Cell to Cell")+
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"),
+        axis.title.x=element_blank(),
+        axis.text.x = element_text(angle =45,hjust=1),
+        axis.title.y= element_blank())
+```
+
+```{r, echo=FALSE}
+# Define variable containing url
+url <- "https://github.com/madelarambelje/Cell_Cell/raw/andre/heatmap_raw_count.png"
+```
+
+![](`r url`)
+
+
+```{r, eval=FALSE}
+# Converting to adjacency matrix
+get.adjacency <- graph.data.frame(network)
+# Make adjacency
+adjaceny.m = get.adjacency(get.adjacency, sparse = FALSE, attr='count')
+# Make to graph
+g <- graph_from_adjacency_matrix(adjaceny.m, mode = "undirected", weighted= T)
+# Setting position loops
+edge.start <- ends(g, es = E(g), names = F)
+coords <- layout_(g, in_circle())
+edge.start <- ends(g, es = E(g), names = F)
+
+
+# This code section is pretty advanced, cannot really say whats happening here.
+# This code adjusts the label position.
+if(nrow(coords)!=1){
+  coords_scale=scale(coords)
+}else{
+  coords_scale<-coords
+}
+loop.angle<-ifelse(coords_scale[igraph::V(g),1]>0,-atan(coords_scale[igraph::V(g),2]/coords_scale[igraph::V(g),1]),
+                   pi-atan(coords_scale[igraph::V(g),2]/coords_scale[igraph::V(g),1]))
+if(sum(edge.start[,2]==edge.start[,1])!=0){
+  igraph::E(g)$loop.angle[which(edge.start[,2]==edge.start[,1])]<-loop.angle[edge.start[which(edge.start[,2]==edge.start[,1]),1]]
+}
+radian.rescale <- function(x, start=0, direction=1) {
+  c.rotate <- function(x) (x + start) %% (2 * pi) * direction
+  c.rotate(scales::rescale(x, c(0, 2 * pi), range(x)))
+}
+
+vertex.size.max <- 15
+vertex.weight <- 20
+vertex.weight.max <- max(vertex.weight)
+vertex.weight <- vertex.weight/vertex.weight.max*vertex.size.max+5
+label.locs <- radian.rescale(x=1:length(igraph::V(g)), direction=-1, start=0)
+label.dist <- vertex.weight/max(vertex.weight)+2
+#Setting edge width, weight limits
+edge.width.max <- 8
+edge.weight.max <- max(E(g)$weight)
+# Scaling edge width
+E(g)$width<-0.3+(E(g)$weight/edge.weight.max*edge.width.max)
+#Setting colors vertices
+color.use <- scPalette(length(unique(network[,1])))
+V(g)$color <- color.use
+# Setting vertex size
+deg <- degree(g)
+print(deg)
+# ADJUST THIS LINE FOR NODE SIZE
+deg <- rowSums2(adjaceny.m[V(g)$name,])  /40
+
+
+# Network
+plot(g,main="Interaction Network",vertex.size = deg, 
+                          layout=coords, 
+                          rescale=T, edge.curved=0.1, margin=0, 
+                          title.name="Lap", 
+                          vertex.label.degree=label.locs, 
+                          vertex.label.dist=label.dist,
+                          vertex.label.family="helvitica")
+```
+
+```{r, echo=FALSE}
+# Define variable containing url
+url <- "https://raw.githubusercontent.com/madelarambelje/Cell_Cell/andre/network.png"
+```
+
+![](`r url`)
+
+## Closing virtual environment
+Close your created virtual environment, execute this command in your terminal
+
+```{bash, eval=FALSE}
+conda deactivate
+```
+
