@@ -5,17 +5,19 @@ This repository explains the use of ICELLNET tool in the research project: "Cell
 
 ## Contents
 
--[Introduction](#introduction) 
--[Workflow](#workflow)
--[Installation of ICELLNET package](#install_ICELLNET)
--[Visualizations](#visualization)
--[Case Study](#casestudy)
+- [Introduction](#introduction) 
+- [Workflow](#workflow)
+- [Installation of ICELLNET package](#install_ICELLNET)
+- [Visualizations](#visualization)
+- [Case Study](#casestudy)
 
-## Introduction {#introduction}
+
+
+# Introduction <a name="introduction"></a>
 **ICELLNET** is a transcriptomic-based framework recently developed by [soumelis lab](https://github.com/soumelis-lab) for the analysis of cell to cell communication based on expression of ligand-receptor pairs. In this project ICELLNET was selected as one of the three tools to find a *gold standard* in analyzing single-cell RNA-seq data. ICELLNET package allows to calculate interaction score based on the interaction pairs present in ligands of central cell to its receptors of cognate peripheral cells. On the basis of calculated interaction scores different visualizations are obtained. Along with the Lupus dataset which is used in tutorial 2 of ICELLNET, ICELLNET was applied on other 2 datasets which were used in the other two tools CellPhoneDB and CellChat.
 
 
-## Workflow {#workflow}
+## Workflow <a name="workflow"></a>
 In this section we have defined stepwise details about implementation of ICELLNET on the datasets.
 
 #1. Selecting the tutoprial datasets for the tools.
@@ -27,11 +29,11 @@ Only one cell type should be used as a central cell for calculation of interacti
 #3. Use the interaction score matrix to generate the visualization. 
 
 
-## Installation of ICELLNET package {#install_ICELLNET}
+## Installation of ICELLNET package <a name="install_ICELLNET"></a>
 The necessary prerequisites to use ICELLNET can be downloaded from this link [prerequisite.r](https://github.com/madelarambelje/Cell_Cell/blob/shreya/prerequisite.r)
 
 
-## Visualizations {#visualization}
+## Visualizations  <a name="visualization"></a>
 ICELLNET provides different visualizations in form of network plot, bar plot, bubble plot and heatmap.
 Predefined functions were used to generate the plots.
 
@@ -48,7 +50,7 @@ Bubble Plot in ICELLNET shows a score on interaction between the most contributi
 #4. Heatmap
 LR.heatmap() function was used to create heatmaps based on the calculated interaction score. It shows identical details as the bubble plot but in a heatmap. This function is not yet published by the original author of ICELLNET therefore it is not possible to mention further details of how the function works. As a part of our project the source code was exclusively shared with us by the author to create visualizations.Hence,in this vignette only the final results are published.  
 
-## Casestudy {#casestudy}
+## Casestudy  <a name="casestudy"></a>
 
 #1) [ICELLNET tutorial dataset](https://github.com/madelarambelje/Cell_Cell/blob/shreya/Case%20Study/Lupus_ICELLNET.R)
 
