@@ -1,4 +1,4 @@
-Author: Andre de la Rambelje
+### Author: Andre de la Rambelje
 # Cell-Cell Communication Analysis using scRNA-seq Data
 This repository contains the comparison of three novel cell-cell interaction tools. Here we will compare CellPhoneDB, CellChat and ICELLNET. 
 
@@ -7,9 +7,9 @@ These tools predict interactions between cells using ligand and receptors. Each 
 ## Structure
 ### Branch structure
 Each branch contains a different tool.
-- andre: CellPhoneDB
-- nick: CellChat
-- shreya: ICELLNET
+- [andre](https://github.com/madelarambelje/Cell_Cell/tree/andre): CellPhoneDB
+- [nick](https://github.com/madelarambelje/Cell_Cell/tree/nick): CellChat
+- [shreya](https://github.com/madelarambelje/Cell_Cell/tree/shreya): ICELLNET
 
 ## scRNA-seq Data used
 
