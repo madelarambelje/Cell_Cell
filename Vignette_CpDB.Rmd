@@ -5,15 +5,10 @@ output:
   html_document: default
   pdf_document: default
 ---
-This document contains a vignette of the usage of CellPhoneDB. CellPhoneDB predicts cell-cell interactions using permutation testing. This package is written in python and runs via the commandline. Terminals makes users often scared, nevertheless it is incredibly powerfull and efficient. Here, we will demonstrate how to use cellphonedb in the terminal.
+This document contains a vignette of the usage of CellPhoneDB. CellPhoneDB predicts cell-cell interactions using permutation testing. This package is written in python and runs via the commandline. Terminals makes users often scared, nevertheless it is incredibly powerfull and efficient. CellPhoneDB forces the user to make visualizations manually. Hence, some code for visualizations is provided here. Here, we will demonstrate how to use CellPhoneDB in the terminal and create some visualization using its output.
 
-```{css, echo=FALSE}
-.badCode {
-background-color: black;
-}
-```
 ## Installation
-First, lets clone the repository, if you have already done that, skip this codechunk.
+First, let's clone the repository, if you have already done that, skip this codechunk.
 ```{bash , eval=F}
 git clone https://github.com/madelarambelje/Cell_Cell.git
 ```
@@ -22,7 +17,9 @@ Now, we have to check which python version is used. CellPhoneDB works only with 
 ```{bash, include=TRUE, eval=FALSE}
 python3 --version
 ```
+##### NOTE: Use a virtual environment, as explained below 
 If your python version < 3.6, you can create a virtual environment using conda to create an updated python version. You can download miniconda or anaconda. In this example we will use miniconda, because this installs less initial packages.
+
 
 Go to https://docs.conda.io/en/latest/miniconda.html and download a version > 3.7 .  Give the user 
 ```{bash, include = TRUE, eval=FALSE}
@@ -44,7 +41,7 @@ pip3 install cellphonedb
 
 ## Preprocessing
 #### Changing cell label column name to "Cluster"
-CellphoneDB is now ready to be used, however we have to do some preprocessing to run the actual analysis 
+CellphoneDB is now ready to be used, however we have to do some preprocessing to run the actual analysis. Open your R console and look for the columnname in which the cell labels are defined. Change this columnname to "Cluster". 
 ```{r, eval=FALSE}
 seurat.object <- readRDS("PATH_TO_SEURAT_OBJECT.rds")
 # Check which Column index contains the cell labels
@@ -56,19 +53,26 @@ setwd("~")
 saveRDS(seurat.object, "seurat_adj_col.rds")
 ```
 ## Run Analysis CellPhoneDB
-Now we are ready to run the analysis using the 'RunCPDB.sh' script. * This script requires three inputs:    
-  1.    Output directory name   
-  2.    Seurat object saved as rds     
-  3.    Amount of threads to use    
+   
 
-Move to the directory this script is stored in.
+Move to the directory this script is stored in. Move to directory "andre" and run chmod for executing rights.
 ```{bash, eval=FALSE}
 cd Cell_Cell/
 git checkout andre
 cd PipelineCPDB/
 chmod u=rx RunCPDB.sh
+```
+
+Now we are ready to run the analysis using the 'RunCPDB.sh' script. 
+This script requires three inputs:    
+  1.    Output directory name   
+  2.    Seurat object saved as rds     
+  3.    Amount of threads to use
+#### Note Change these inputs corresponding to your naming convention and seurat object. 
+```{bash, eval=FALSE}
 ./RunCPDB.sh OutputDirName seurat_object.rds number_of_threads
 ```
+
 ## Generating Visualizations
 Check the output, go to OutputDirName/out/out, here a heatmap is build by cellphonedb, however, this figure can be misleading due to the colors used. Therefore we create our own.
 ```{bash, eval=FALSE}
@@ -82,9 +86,9 @@ install.packages('BiocManager')
 pacman::p_load(igraph, RColorBrewer,matrixStats ,ggplot2, Seurat,scAI)
 ```
 
-Now we create our own heatmap! Load the count_network data.
+Now we create our own heatmap! Load the count_network.txt data.
 ```{r, eval=FALSE}
-network = read.csv("/students/2020-2021/master/CellPhoneDB/TestingPipeline/ResultsPipeline/CellChat/out/out/count_network.txt", sep = "\t", header = TRUE)
+network = read.csv("count_network.txt", sep = "\t", header = TRUE)
 ```
 ### Heatmap log(counts)
 We can either make heatmap with log(count) or with the raw counts.
@@ -105,6 +109,8 @@ url <- "https://raw.githubusercontent.com/madelarambelje/Cell_Cell/andre/heatmap
 
 ![](`r url`)
 
+This heatmap shows the log(count) interactions between cell clusters. On both the axis cell clusters are displayed.
+
 ### Heatmap Raw counts
 Here, a heatmap is generated using the raw counts.
 ```{r eval=FALSE}
@@ -124,7 +130,13 @@ url <- "https://github.com/madelarambelje/Cell_Cell/raw/andre/heatmap_raw_count.
 
 ![](`r url`)
 
+This heatmap shows the number interactions between cell clusters. On both the axis cell clusters are displayed.
 
+### Network
+
+The code below is advanced and hard to comprehend, this was difficult and time consuming to produce and comprehend myself.
+
+#### NOTE: Adjust capital lines if edges and/or nodes are consuming the figure by dividing ("/n") or multiplying(*n) the calculation. Use trial and error to see what works best, this depends on the number of interactions cellphonedb predicted. 
 ```{r, eval=FALSE}
 # Converting to adjacency matrix
 get.adjacency <- graph.data.frame(network)
@@ -165,6 +177,7 @@ label.dist <- vertex.weight/max(vertex.weight)+2
 edge.width.max <- 8
 edge.weight.max <- max(E(g)$weight)
 # Scaling edge width
+# ADJUST THIS LINE IF EDGE WIDTH IS TO SMALL/LARG
 E(g)$width<-0.3+(E(g)$weight/edge.weight.max*edge.width.max)
 #Setting colors vertices
 color.use <- scPalette(length(unique(network[,1])))
@@ -192,6 +205,7 @@ url <- "https://raw.githubusercontent.com/madelarambelje/Cell_Cell/andre/network
 ```
 
 ![](`r url`)
+In the visualization displayed above, a graph is visualized. Each node represents a celltype in the dataset. The size of this node represents the total number of interactions cellphonedb predicted for this celltype. The grey lines, represents the edges and this shows which cells are interacting with each other. 
 
 ## Closing virtual environment
 Close your created virtual environment, execute this command in your terminal
