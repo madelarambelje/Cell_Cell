@@ -7,10 +7,10 @@
 # Date: June 15, 2021
 
 
-
+setwd('~/Desktop/Masters/Cell_Cell_Project/ICELLNET')
 
 #Run prerequisite.r to load the necessary libraries and functions
-source(prerequisite.r)
+source("prerequisite.r")
 
 
 cpdb <- readRDS(file = "Article_CellPhoneDB.rds")

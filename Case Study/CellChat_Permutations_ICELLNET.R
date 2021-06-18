@@ -10,9 +10,10 @@
 
 
 #pdf("CellChatresults.pdf") # To save all plots in a pdf file
+setwd('~/Desktop/Masters/Cell_Cell_Project/ICELLNET')
 
 #Run prerequisite.r to load the necessary libraries and functions
-source(prerequisite.r)
+source("prerequisite.r")
 
 
 #Load data

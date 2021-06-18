@@ -68,11 +68,11 @@ LR.heatmap() function was used to create heatmaps based on the calculated intera
 
 ## Casestudy {#casestudy}
 
-#1) [ICELLNET tutorial dataset]()
+#1) [ICELLNET tutorial dataset](https://github.com/madelarambelje/Cell_Cell/blob/shreya/Case%20Study/Lupus_ICELLNET.R)
 
-#2) [CellPhoneDB tutorial dataset]()
+#2) [CellPhoneDB tutorial dataset](https://github.com/madelarambelje/Cell_Cell/blob/shreya/Case%20Study/Cellphonedb_ICELLNET.R)
 
-#3) [CellChat tutorial dataset]()
+#3) [CellChat tutorial dataset](https://github.com/madelarambelje/Cell_Cell/blob/shreya/Case%20Study/CellChat_Permutations_ICELLNET.R)
 
 
 
