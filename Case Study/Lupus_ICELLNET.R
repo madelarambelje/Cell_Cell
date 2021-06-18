@@ -1,25 +1,55 @@
 
-#This file contains the code for comparing ICELLNET on tutorial article to compare the interactions between
-#specific cell of interest 
-#Author: Shreya Dey
+# This file contains the code for comparing ICELLNET on tutorial article to compare the interactions between
+# specific cell of interest (CE0 and CM4)
 
+# Author: Shreya Dey
+# University: Hanzehogeschool, Groningen
+# Date: June 18, 2021
+
+
+
+
+#Run prerequisite.r to load the necessary libraries and functions
+source(prerequisite.r)
 
 #Load data
 #Change the file names here
-per.cc <- readRDS(file = "Lupus_Seurat_SingleCell_Landscape.Rds") 
-per.cc <- NormalizeData(per.cc)
-per.cc <- ScaleData(per.cc)
+lup <- readRDS(file = "Lupus_Seurat_SingleCell_Landscape.Rds") 
+lup <- NormalizeData(lup)
+lup <- ScaleData(lup)
 
 #only for UMAP visualization, not for ICELLNET purpose
-seurat <- FindVariableFeatures(seurat, selection.method = "vst", nfeatures = 2000)
-seurat <- RunPCA(seurat)
-seurat <- RunUMAP(seurat, dims = 1:50)
-DimPlot(seurat, reduction = 'umap', group.by = 'author_annotation', label = T)
+lup <- FindVariableFeatures(lup, selection.method = "vst", nfeatures = 2000)
+lup <- RunPCA(lup)
+lup <- RunUMAP(lup, dims = 1:50)
+DimPlot(lup, reduction = 'umap', group.by = 'author_annotation', label = T)
+
+# The lupus dataset is by default annoted by clusters as compared to what was used in the actual tutorial,
+# if any error is encountered while running the sc.data.cleaning function, run the next line before running the rest of the code
+
+Idents(lup)=lup$author_annotation
 
 filter.perc=0
-average.clean.percc.ic= sc.data.cleaning(object = per.cc, db = db, filter.perc = filter.perc, save_file = T, path=NULL, force.file = F)
+average.clean.lup= sc.data.cleaning(object = lup, db = db, filter.perc = filter.perc, save_file = T, path=NULL, force.file = F)
 
-data.icell.percc=as.data.frame(gene.scaling(as.data.frame(average.clean.percc), n=1, db=db))
+# If the above code for calculating average clean does not work, uncomment the below code and try to run
+
+# target <- lup@meta.data
+# target$Class=target$author_annotation
+# target$Cell=rownames(target)
+# 
+# average.manual=matrix(ncol=length(unique(target$author_annotation)), nrow=length(rownames(data)))
+# colnames(average.manual)=unique(target$author_annotation)
+# rownames(average.manual)=rownames(data)
+# dim(average.manual)
+# for (cell in unique(target$author_annotation)){
+#   cells.clust=target$Cell[which(target$author_annotation==cell)]
+#   average.manual[,cell]=apply(data[,which(colnames(data)%in%cells.clust)], 1, mean)
+# }
+# 
+# average.clean=average.manual
+
+data.icell.lup=as.data.frame(gene.scaling(as.data.frame(average.clean.lup), n=1, db=db))
 
 # label and color label if you are working families of molecules already present in the database
 #66ABDF e11e6d
@@ -28,14 +58,14 @@ family.col = c( "Growth factor"= "#AECBE3", "Chemokine"= "#66ABDF", "Checkpoint"
                 "Cytokine"="#156399", "Notch family" ="#676766", "Antigen binding" = "#12A039",  "other" = "#908F90",  "NA"="#908F90")
 
 
-recpex = colnames(data.icell.percc[, !names(data.icell.percc) %in% c("Symbol")]) #receptors expressed
+recpex = colnames(data.icell.lup[, !names(data.icell.lup) %in% c("Symbol")]) #receptors expressed
 
-PC.data.percc=as.data.frame(data.icell.percc[], row.names = rownames(data.icell.percc))
+PC.data.lup=as.data.frame(data.icell.lup[], row.names = rownames(data.icell.lup))
 
 #my.colname = c(recpex)
-PC.target.percc=data.frame("Class"=c(recpex), "ID"= c(recpex), "Cell_type"=c(recpex))
-rownames(PC.target.percc)=c(recpex)
-my.selection.percc=c(recpex)
+PC.target.lup=data.frame("Class"=c(recpex), "ID"= c(recpex), "Cell_type"=c(recpex))
+rownames(PC.target.lup)=c(recpex)
+my.selection.lup=c(recpex)
 
 
 outdirection = "out"
@@ -45,21 +75,21 @@ indirection = "in"
 centralcell = "CE0"
 interactions = c("CXCL12 / CXCR4","CX3CL1 / CX3CR1")
 
-score.computation.perccin= icellnet.score(direction=indirection, PC.data=PC.data.percc, 
-                                          CC.data= as.data.frame(data.icell.percc[,c(centralcell)], row.names = rownames(data.icell.percc)),  
-                                          PC.target = PC.target.percc, PC=my.selection.percc, CC.type = "RNAseq", 
+score.computation.lupin= icellnet.score(direction=indirection, PC.data=PC.data.lup, 
+                                          CC.data= as.data.frame(data.icell.lup[,c(centralcell)], row.names = rownames(data.icell.lup)),  
+                                          PC.target = PC.target.lup, PC=my.selection.lup, CC.type = "RNAseq", 
                                           PC.type = "RNAseq",  db = db)
-score1.perccin=as.data.frame(score.computation.perccin[[1]])
-lr1.perccin=score.computation.perccin[[2]]
+score1.lupin=as.data.frame(score.computation.lupin[[1]])
+lr1.lupin=score.computation.lupin[[2]]
 
-score.computation.perccout= icellnet.score(direction=outdirection, PC.data=PC.data.percc, 
-                                           CC.data= as.data.frame(data.icell.percc[,c(centralcell)], row.names = rownames(data.icell.percc)),  
-                                           PC.target = PC.target.percc, PC=my.selection.percc, CC.type = "RNAseq", 
+score.computation.lupout= icellnet.score(direction=outdirection, PC.data=PC.data.lup, 
+                                           CC.data= as.data.frame(data.icell.lup[,c(centralcell)], row.names = rownames(data.icell.lup)),  
+                                           PC.target = PC.target.lup, PC=my.selection.lup, CC.type = "RNAseq", 
                                            PC.type = "RNAseq",  db = db)
-score1.perccout=as.data.frame(score.computation.perccout[[1]])
-lr1.perccout=score.computation.perccout[[2]]
+score1.lupout=as.data.frame(score.computation.lupout[[1]])
+lr1.lupout=score.computation.lupout[[2]]
 
-Scoresio=cbind(score1.perccin,score1.perccout)
+Scoresio=cbind(score1.lupin,score1.lupout)
 colnames(Scoresio)=c(paste(paste(centralcell),paste("(R)-in")),paste(paste(centralcell),paste("(L)-out")))
 Scoresio #combined input and output score
 
@@ -82,23 +112,23 @@ ymax=round(max(Scoresio))+1
 
 #code for box plot
 #Boxplot shows global scores at level of molecules of class, there is no need to select scores for specific interactions
-contrib.family.1= LR.family.score(lr=lr1.perccin, my.family=my.family, db.couple=db.name.couple, plot= T, family.col=family.col, title=paste(paste(centralcell),paste("(R)-in")))
-contrib.family.2= LR.family.score(lr=lr1.perccout, my.family=my.family, db.couple=db.name.couple, plot= T, family.col=family.col, title=paste(paste(centralcell),paste("(L)-out")))
+contrib.family.1= LR.family.score(lr=lr1.lupin, my.family=my.family, db.couple=db.name.couple, plot= T, family.col=family.col, title=paste(paste(centralcell),paste("(R)-in")))
+contrib.family.2= LR.family.score(lr=lr1.lupout, my.family=my.family, db.couple=db.name.couple, plot= T, family.col=family.col, title=paste(paste(centralcell),paste("(L)-out")))
 grid.arrange(contrib.family.1, contrib.family.2, ncol=2, nrow=1)
 
 #LR tables
-LR.family.score(lr=lr1.perccin, my.family=my.family, db.couple=db.name.couple, plot=F)
-LR.family.score(lr=lr1.perccout, my.family=my.family, db.couple=db.name.couple, plot=F)
+LR.family.score(lr=lr1.lupin, my.family=my.family, db.couple=db.name.couple, plot=F)
+LR.family.score(lr=lr1.lupout, my.family=my.family, db.couple=db.name.couple, plot=F)
 
 #For balloon plot and heatmap we are selecting specific interactions as we want to check if interaction is present or not
 #balloon plot
-LR.balloon.plot(lr = lr1.perccin[interactions,], thresh = 10 , topn=11 , sort.by="sum",  db.name.couple=db.name.couple, family.col=family.col, title=paste(paste("Most contributing interactions of"),paste(centralcell),paste("by sum/in")))
-LR.balloon.plot(lr = lr1.perccout[interactions,], thresh = 0 , topn=30 , sort.by="sum",  db.name.couple=db.name.couple, family.col=family.col, title=paste(paste("Most contributing interactions of"),paste(centralcell),paste("by sum/out")))
-lrsum = lr1.perccin + lr1.perccout
+LR.balloon.plot(lr = lr1.lupin[interactions,], thresh = 10 , topn=11 , sort.by="sum",  db.name.couple=db.name.couple, family.col=family.col, title=paste(paste("Most contributing interactions of"),paste(centralcell),paste("by sum/in")))
+LR.balloon.plot(lr = lr1.lupout[interactions,], thresh = 0 , topn=30 , sort.by="sum",  db.name.couple=db.name.couple, family.col=family.col, title=paste(paste("Most contributing interactions of"),paste(centralcell),paste("by sum/out")))
+lrsum = lr1.lupin + lr1.lupout
 LR.balloon.plot(lr = lrsum[interactions,], thresh = 10 , topn=11 , sort.by="sum",  db.name.couple=db.name.couple, family.col=family.col, title=paste(paste("Most contributing interactions of"),paste(centralcell),paste("by sum(in+out)")))
 
 #heatmap
-LR.heatmap(lr = lr1.perccin[interactions,], thresh = 0, topn = NULL, sort.by = "sum",  db.name.couple = db.name.couple, title = paste(paste(centralcell),paste("-IN")), family.col = family.col, value_display=50)  
-LR.heatmap(lr = lr1.perccout[interactions,], thresh = 0, topn = NULL, sort.by = "sum",  db.name.couple = db.name.couple, title = paste(paste(centralcell),paste("-OUT")), family.col = family.col, value_display=50)  
+LR.heatmap(lr = lr1.lupin[interactions,], thresh = 0, topn = NULL, sort.by = "sum",  db.name.couple = db.name.couple, title = paste(paste(centralcell),paste("-IN")), family.col = family.col, value_display=50)  
+LR.heatmap(lr = lr1.lupout[interactions,], thresh = 0, topn = NULL, sort.by = "sum",  db.name.couple = db.name.couple, title = paste(paste(centralcell),paste("-OUT")), family.col = family.col, value_display=50)  
 
 
