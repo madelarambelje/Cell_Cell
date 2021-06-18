@@ -61,9 +61,9 @@ LR.heatmap() function was used to create heatmaps based on the calculated intera
 
 This section contains the link for the code of ICELLNET implementation for tutorial datasets.
 
-1) [ICELLNET tutorial dataset](https://github.com/madelarambelje/Cell_Cell/blob/shreya/Case%20Study/Lupus_ICELLNET.R)
+1) [CellChat tutorial dataset](https://github.com/madelarambelje/Cell_Cell/blob/shreya/Case%20Study/CellChat_Permutations_ICELLNET.R)
 
 2) [CellPhoneDB tutorial dataset](https://github.com/madelarambelje/Cell_Cell/blob/shreya/Case%20Study/Cellphonedb_ICELLNET.R)
 
-3) [CellChat tutorial dataset](https://github.com/madelarambelje/Cell_Cell/blob/shreya/Case%20Study/CellChat_Permutations_ICELLNET.R)
+3) [ICELLNET tutorial dataset](https://github.com/madelarambelje/Cell_Cell/blob/shreya/Case%20Study/Lupus_ICELLNET.R)
 
