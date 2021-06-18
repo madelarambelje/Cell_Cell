@@ -136,5 +136,12 @@ LR.balloon.plot(lr = lr_icafsum[interactions_icaf_gf,], thresh = 10 , topn=11 , 
 
 
 #Heatmap
-LR.heatmap(lr = lr_icafsum[interactions_icaf,], thresh = 0, topn = NULL, sort.by = "sum",  db.name.couple = db.name.couple, title = paste(paste(centralcell),paste("-IN")), family.col = family.col, value_display=50)  
-LR.heatmap(lr = lr_icafsum[interactions_icaf_gf,], thresh = 0, topn = NULL, sort.by = "sum",  db.name.couple = db.name.couple, title = paste(paste(centralcell),paste("-OUT")), family.col = family.col, value_display=50)  
+
+ # ---------Important Note---------------------------------------------------------------------------------------------------------#
+ # Comment below 2 lines before running the code, this function is not yet published by the author, here *xarguments represents    #
+ # arguments which were passed to create the heatmaps                                                                              #
+ #---------------------------------------------------------------------------------------------------------------------------------#
+  
+ 
+LR.heatmap(*xarguments, title = paste(paste(centralcell),paste("-IN")))  
+LR.heatmap(*xarguments, title = paste(paste(centralcell),paste("-OUT")))  
