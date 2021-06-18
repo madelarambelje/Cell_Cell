@@ -7,10 +7,13 @@ output:
   word_document: default
 ---
 
+This script was used to select cellstypes, and subset by conserving the natural composition and subset using a uniform distribution 
+
+SCRIPT NOT USED IN ARTICLE 
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
 ```{r Libraries, echo=TRUE}
 library("Seurat")
 library("Matrix")
