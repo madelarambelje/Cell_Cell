@@ -42,20 +42,23 @@ Predefined functions were used to generate the plots.
 
 1. Network Plot
 
-Function network.create() was used to create Network plots to show communication between a central cell to a selection of multiple peripheral cells. The interaction score is normalized on a scale of 1-10 before plotting it into a network graph.Edges represent cell types and nodes represent communication between the cell types. The arrows show in which direction the communication is present and the width of arrows represents the intensity of communication based on the normalized score (1-10)
+Function network.create() was used to create [network plots](https://github.com/madelarambelje/Cell_Cell/blob/shreya/Visualizations/networkplot.png) to show communication between a central cell to a selection of multiple peripheral cells. The interaction score is normalized on a scale of 1-10 before plotting it into a network graph.Edges represent cell types and nodes represent communication between the cell types. The arrows show in which direction the communication is present and the width of arrows represents the intensity of communication based on the normalized score (1-10). In the plot, **R** and **L** denotes **receptors** and **ligands** expressed by central cell respectively. LC(R)-in signifies communication is from ligands of peripheral cells to receptors expressed by central cell LC. LC(L)-out signifies communication is from ligands of central cell LC to receptors of peripheral cells.
 
 
 2. Bar Plot
 
-To calculate the contribution of each family of molecules to the global communication scores, function LR.family.score() was used. The ligand-receptor interaction score calculated previously in [Process step 2](#score)  is passed as an argument. When the plot argument is set as FALSE it creates a table and displays it in the R console and when it is set to TRUE it creates a barplot. This plot helps in understanding the distribution of communication molecules based on families or subfamilies of molecules which are present in the ICELLNET database.
+To calculate the contribution of each family of molecules to the global communication scores, function LR.family.score() was used. The ligand-receptor interaction score calculated previously in [Process step 2](#score)  is passed as an argument. When the plot argument is set as FALSE it creates a table and displays it in the R console and when it is set to TRUE it creates a [barplot](https://github.com/madelarambelje/Cell_Cell/blob/shreya/Visualizations/barplot.png). This plot helps in understanding the distribution of communication molecules based on families or subfamilies of molecules which are present in the ICELLNET database. The category defined as other is not yet classified in the ICELLNET database. Hence, it is difficult to say which families or subfamilies the cells are contributing.
 
-3. Bubble Plot
 
-Bubble Plot in ICELLNET shows a score on interaction between the most contributing ligand/receptor pairs to the communication score. This allows to identify specific individual interactions that can drive the intercellular communication and should be confirmed experimentally. LR.balloon.plot() function was used to create bubble plots. The contribution scores can be sorted based on 2 criterias by 'sum' or by 'var'. 'sum' is used to highlight highest contribution factors while 'var is used to highlight the differences. We used sum for our visualizations as we wanted to check whcih interaction pairs contribute the highest.
+3. Bubble Plot/Bubble Plot
+
+Bubble Plot in ICELLNET shows a score on interaction between the most contributing ligand/receptor pairs to the communication score. This allows to identify specific individual interactions that can drive the intercellular communication and should be confirmed experimentally. LR.balloon.plot() function was used to create [bubble plots](https://github.com/madelarambelje/Cell_Cell/blob/shreya/Visualizations/balloon_plot.png). The contribution scores can be sorted based on 2 criterias by 'sum' or by 'var'. 'sum' is used to highlight highest contribution factors while 'var' is used to highlight the differences. We used sum for our visualizations as we wanted to check which interaction pairs contribute the highest. The color shows family of molecule and the size of bubble represents interaction score on a scale of 0-100. In the plot, only top 30 interactions are shown for cell type LC. Specific interaction pairs can be selected by using LR score matrix which is shown in casestudy 2 and casestudy 3.
+
 
 4. Heatmap
 
-LR.heatmap() function was used to create heatmaps based on the calculated interaction score. It shows identical details as the bubble plot but in a heatmap. This function is not yet published by the original author of ICELLNET therefore it is not possible to mention further details of how the function works. As part of our project the source code was exclusively shared with us by the author to create visualizations.Hence,in this vignette only the final results are published.  
+LR.heatmap() function was used to create [heatmaps](https://github.com/madelarambelje/Cell_Cell/blob/shreya/Visualizations/heatmap.png) based on the calculated interaction score. It shows identical details as the bubble plot but in a heatmap. This function is not yet published by the original author of ICELLNET therefore it is not possible to mention further details of how the function works. As part of our project the source code was exclusively shared with us by the author to create visualizations. Hence,in this project only the final results are published.  
+
 
 ## Casestudy  <a name="casestudy"></a>
 
