@@ -1,6 +1,9 @@
 Author: Shreya Dey
 
+------
 # Cell-Cell communication analysis with ICELLNET
+------
+
 This repository explains the use of ICELLNET tool in the research project: "Cell-Cell communication analysis using single-cell RNA seq data: A comparison of three novel tools"
 
 ## Contents
@@ -44,17 +47,19 @@ Function network.create() was used to create Network plots to show communication
 
 2. Bar Plot
 
-To calculate the contribution of each family of molecules to the global communication scores LR.family.score() was used where ligand-receptor interaction score calculated previously in [step 2 of Workflow](#score)  is passed as an argument to compute the contribution of families or subfamilies of molecules to the global communication scores. When the plot argument is set as FALSE it creates a table and displays it in the R console and when it is set to TRUE it creates a barplot. This plot helps in understanding the distribution of communication molecules based on families or subfamilies of molecules which are present in the ICELLNET database.
+To calculate the contribution of each family of molecules to the global communication scores, function LR.family.score() was used. The ligand-receptor interaction score calculated previously in [Process step 2](#score)  is passed as an argument. When the plot argument is set as FALSE it creates a table and displays it in the R console and when it is set to TRUE it creates a barplot. This plot helps in understanding the distribution of communication molecules based on families or subfamilies of molecules which are present in the ICELLNET database.
 
 3. Bubble Plot
 
-Bubble Plot in ICELLNET shows a score on interaction between the most contributing ligand/receptor pairs to the communication score. This allows to identify specific individual interactions that can drive the intercellular communication and should be confirmed experimentally. LR.balloon.plot() function was used to create bubble plots. The contribution scores can be sorted based on 2 criterias by 'sum' or by 'var'. sum is used to highlight highest contribution factors while var is used to highlight the differences. We used sum for our visualizations as we wanted to check whcih interaction pairs contribute the highest.
+Bubble Plot in ICELLNET shows a score on interaction between the most contributing ligand/receptor pairs to the communication score. This allows to identify specific individual interactions that can drive the intercellular communication and should be confirmed experimentally. LR.balloon.plot() function was used to create bubble plots. The contribution scores can be sorted based on 2 criterias by 'sum' or by 'var'. 'sum' is used to highlight highest contribution factors while 'var is used to highlight the differences. We used sum for our visualizations as we wanted to check whcih interaction pairs contribute the highest.
 
 4. Heatmap
 
-LR.heatmap() function was used to create heatmaps based on the calculated interaction score. It shows identical details as the bubble plot but in a heatmap. This function is not yet published by the original author of ICELLNET therefore it is not possible to mention further details of how the function works. As a part of our project the source code was exclusively shared with us by the author to create visualizations.Hence,in this vignette only the final results are published.  
+LR.heatmap() function was used to create heatmaps based on the calculated interaction score. It shows identical details as the bubble plot but in a heatmap. This function is not yet published by the original author of ICELLNET therefore it is not possible to mention further details of how the function works. As part of our project the source code was exclusively shared with us by the author to create visualizations.Hence,in this vignette only the final results are published.  
 
 ## Casestudy  <a name="casestudy"></a>
+
+This section contains the link for the code of ICELLNET implementation for tutorial datasets.
 
 1) [ICELLNET tutorial dataset](https://github.com/madelarambelje/Cell_Cell/blob/shreya/Case%20Study/Lupus_ICELLNET.R)
 
