@@ -158,7 +158,13 @@ for (labelname in recpex){
   grid.arrange(BP5)
   
   #function to plot heatmap with combined sum
-  HP = LR.heatmap(lr = lrsum, thresh = 0, topn = 30, sort.by = "sum",  db.name.couple = db.name.couple, title = paste("Most contributing interactions of",paste(labelname),paste("(by sum)")), family.col = family.col, value_display=50)  
+  
+  # ---------Important Note---------------------------------------------------------------------------------------------------------#
+  # Comment below 2 lines before running the code, this function is not yet published by the author, here *xarguments represents    #
+  # arguments which were passed to create the heatmaps                                                                              #
+  #---------------------------------------------------------------------------------------------------------------------------------#
+  
+  HP = LR.heatmap(*xarguments, title = paste("Most contributing interactions of",paste(labelname),paste("(by sum)")))  
   grid.arrange(HP)
   
 }
