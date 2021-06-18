@@ -5,7 +5,7 @@ This repository contains the comparison of three novel cell-cell interaction too
 These tools predict interactions between cells using ligand and receptors. Each tool in their own way. CellPhoneDB and CellChat are performing permutation testing. ICELLNET calculates the intensity of the ligand-receptor pair and normalizes all the interactions found.
 
 ## Structure
-###Branch structure
+### Branch structure
 Each branch contains a different tool.
 - andre: CellPhoneDB
 - nick: CellChat
