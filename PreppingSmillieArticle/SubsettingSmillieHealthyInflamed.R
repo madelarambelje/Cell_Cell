@@ -1,4 +1,7 @@
-setwd("~/Desktop/ulcerative_colitus")
+# Author: Andre de la Rambelje
+# SCRIPT NOT USED FOR ARTICLE
+# This script was used to subset the healthy and inflamed data.
+
 library("Seurat")
 library("Matrix")
 library(ggplot2)
