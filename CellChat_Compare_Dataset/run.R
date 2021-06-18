@@ -7,24 +7,17 @@
 setwd('~/Desktop/Master Files/Cell_Cell_Project/Cellchat')
 
 # Firstly, install/load the required packages using the 'requisites.r' script
-source('Vignette/requisites.R')
+source('requisites.R')
 
 
 # Give the script the Seurat objects that you want to compare / analyze
-subset1 <- readRDS('Vignette/data/healthy_subset_natural.rds') # E.g. Healthy subset
-subset2 <- readRDS('Vignette/data/inflamed_subset_natural.rds') # E.g. Inflamed subset
+subset1 <- readRDS('healthy_subset_natural.rds') # E.g. Healthy subset
+subset2 <- readRDS('inflamed_subset_natural.rds') # E.g. Inflamed subset
 
-
-# Select which database to use: (Either "CellChat" or "ICELLNET")
 DB <- "ICELLNET"
-#DB <- "CellChat"
-
 
 # Create Cellchat Objects (takes time)
-source('Vignette/create_cellchat_objects.R')
-## OR LOAD CELLCHAT OBJECTS FROM RDS to skip line above (loaded w/ CellChatDB):
-#subset1 <- readRDS("cellchat1.rds")
-#subset2 <- readRDS("cellchat2.rds")
+source('create_cellchat_objects.R')
 
 ### Merge Cellchat objects, set condition for subsets: (Replace Healthy / Inflamed as preferred)
 object.list <- list(Healthy = cellchat1, 
@@ -35,7 +28,7 @@ cellchat
 
 
 # Identify the conserved and context-specific signaling pathways
-source('Vignette/similarity.R')
+source('similarity.R')
 
 # Save merged cellchatfile as RDS:
 saveRDS(cellchat, file = "merged_cellchat_ICELLNETDB.rds")
@@ -46,8 +39,7 @@ saveRDS(cellchat, file = "merged_cellchat_ICELLNETDB.rds")
 
 
 # Create Comparison visualization functions:
-source('Vignette/visualizations.R')
-
+source('visualizations.R')
 
 
 ## PART I
