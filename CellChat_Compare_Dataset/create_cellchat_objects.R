@@ -16,7 +16,7 @@ levels(cellchat2@idents) # show factor levels of the cell labels
 groupSize_subset2 <- as.numeric(table(cellchat2@idents)) # number of cells in each cell group
 
 # RUN DATABASE.R to load either the original CellChatDB or the ICELLNET based DB
-source('Vignette/database.R')
+#source('database.R')
 
 # Compute Interactions:
 #### (Healthy) subset 1:
