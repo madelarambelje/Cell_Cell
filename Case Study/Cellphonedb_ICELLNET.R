@@ -29,9 +29,11 @@ DimPlot(cpdb, reduction = 'umap', group.by = 'Cluster', label = T)
 data <- as.data.frame(GetAssayData(cpdb, slot = "data")) #or other matrix for which features expression values # are scaled by the total expression in each cell
 
 
-##---------------------------------- Important Note ----------------------------------##
-## Replace the name of Cluster column as per your seurat object in calculations below ##
-##------------------------------------------------------------------------------------##
+##---------------------------------- Important Note ---------------------------------------------------------##
+## Replace the name of column in which Cell label is defined as per your seurat object in calculations       ##
+## You can do this by writing name of your seurat object followed by two square brackets as shown belowthis  ##
+## cpdb[[]]                                                                                                  ##
+##-----------------------------------------------------------------------------------------------------------##
 
 target.cpdb <- cpdb@meta.data
 target.cpdb$Class=target.cpdb$Cluster
