@@ -128,7 +128,11 @@ lrsum = lr1.lupin + lr1.lupout
 LR.balloon.plot(lr = lrsum[interactions,], thresh = 10 , topn=11 , sort.by="sum",  db.name.couple=db.name.couple, family.col=family.col, title=paste(paste("Most contributing interactions of"),paste(centralcell),paste("by sum(in+out)")))
 
 #heatmap
-LR.heatmap(lr = lr1.lupin[interactions,], thresh = 0, topn = NULL, sort.by = "sum",  db.name.couple = db.name.couple, title = paste(paste(centralcell),paste("-IN")), family.col = family.col, value_display=50)  
-LR.heatmap(lr = lr1.lupout[interactions,], thresh = 0, topn = NULL, sort.by = "sum",  db.name.couple = db.name.couple, title = paste(paste(centralcell),paste("-OUT")), family.col = family.col, value_display=50)  
 
+# ---------Important Note---------------------------------------------------------------------------------------------------------#
+# Comment below 2 lines before running the code, this function is not yet published by the author, here *xarguments represents    #
+# arguments which were passed to create the heatmaps                                                                              #
+#---------------------------------------------------------------------------------------------------------------------------------#
 
+LR.heatmap(*xarguments, title = paste(paste(centralcell),paste("-IN")))  
+LR.heatmap(*xarguments, title = paste(paste(centralcell),paste("-OUT")))  
