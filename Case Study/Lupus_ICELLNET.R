@@ -47,7 +47,7 @@ average.clean.lup= sc.data.cleaning(object = lup, db = db, filter.perc = filter.
 #   average.manual[,cell]=apply(data[,which(colnames(data)%in%cells.clust)], 1, mean)
 # }
 # 
-# average.clean=average.manual
+# average.clean.lup=average.manual
 
 data.icell.lup=as.data.frame(gene.scaling(as.data.frame(average.clean.lup), n=1, db=db))
 
