@@ -1,1 +1,1 @@
-This folder contains scirpt for the case studies on which ICELLNET pipeline was implemented.
+This folder contains scirpt for the case studies on which ICELLNET pipeline was implemented. Before running the code, it is advised to run prerequisite.r to load all necessary libraries and functions.
