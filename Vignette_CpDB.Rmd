@@ -104,7 +104,7 @@ ggplot(network, aes(x=SOURCE, y=TARGET, fill=log(count))) +
 ```
 ```{r, echo=FALSE}
 # Define variable containing url
-url <- "https://raw.githubusercontent.com/madelarambelje/Cell_Cell/andre/heatmap.png"
+url <- "https://raw.githubusercontent.com/madelarambelje/Cell_Cell/andre/visualizations/heatmap.png"
 ```
 
 ![](`r url`)
@@ -125,7 +125,7 @@ ggplot(network, aes(x=SOURCE, y=TARGET, fill=count)) +
 
 ```{r, echo=FALSE}
 # Define variable containing url
-url <- "https://github.com/madelarambelje/Cell_Cell/raw/andre/heatmap_raw_count.png"
+url <- "https://github.com/madelarambelje/Cell_Cell/raw/andre/visualizations/heatmap_raw_count.png"
 ```
 
 ![](`r url`)
@@ -201,7 +201,7 @@ plot(g,main="Interaction Network",vertex.size = deg,
 
 ```{r, echo=FALSE}
 # Define variable containing url
-url <- "https://raw.githubusercontent.com/madelarambelje/Cell_Cell/andre/network.png"
+url <- "https://raw.githubusercontent.com/madelarambelje/Cell_Cell/andre/visualizations/network.png"
 ```
 
 ![](`r url`)
