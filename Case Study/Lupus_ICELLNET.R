@@ -61,7 +61,7 @@ lr1.perccout=score.computation.perccout[[2]]
 
 Scoresio=cbind(score1.perccin,score1.perccout)
 colnames(Scoresio)=c(paste(paste(centralcell),paste("(R)-in")),paste(paste(centralcell),paste("(L)-out")))
-Scoresio #gives in and out scores in one go
+Scoresio #combined input and output score
 
 Scores.norm=(Scoresio-min(Scoresio))/(max(Scoresio)-min(Scoresio))*9+1
 
@@ -94,8 +94,8 @@ LR.family.score(lr=lr1.perccout, my.family=my.family, db.couple=db.name.couple, 
 #balloon plot
 LR.balloon.plot(lr = lr1.perccin[interactions,], thresh = 10 , topn=11 , sort.by="sum",  db.name.couple=db.name.couple, family.col=family.col, title=paste(paste("Most contributing interactions of"),paste(centralcell),paste("by sum/in")))
 LR.balloon.plot(lr = lr1.perccout[interactions,], thresh = 0 , topn=30 , sort.by="sum",  db.name.couple=db.name.couple, family.col=family.col, title=paste(paste("Most contributing interactions of"),paste(centralcell),paste("by sum/out")))
-lrsumcm4 = lr1.perccin + lr1.perccout
-LR.balloon.plot(lr = lrsumcm4[interactions,], thresh = 10 , topn=11 , sort.by="sum",  db.name.couple=db.name.couple, family.col=family.col, title=paste(paste("Most contributing interactions of"),paste(centralcell),paste("by sum(in+out)")))
+lrsum = lr1.perccin + lr1.perccout
+LR.balloon.plot(lr = lrsum[interactions,], thresh = 10 , topn=11 , sort.by="sum",  db.name.couple=db.name.couple, family.col=family.col, title=paste(paste("Most contributing interactions of"),paste(centralcell),paste("by sum(in+out)")))
 
 #heatmap
 LR.heatmap(lr = lr1.perccin[interactions,], thresh = 0, topn = NULL, sort.by = "sum",  db.name.couple = db.name.couple, title = paste(paste(centralcell),paste("-IN")), family.col = family.col, value_display=50)  
