@@ -28,16 +28,17 @@ per.cc <- RunPCA(per.cc)
 per.cc <- RunUMAP(per.cc, dims = 1:50)
 DimPlot(per.cc, reduction = 'umap', group.by = 'Cluster', label = T)
 
-#Average.clean function does not work for the datasets hence the manual calculatation 
-#mentioned by author is used to get calculations
+
 
 #calculation of average gene expression
 data <- as.data.frame(GetAssayData(per.cc, slot = "data")) #or other matrix for which features expression values # are scaled by the total expression in each cell
 
 
-##---------------------------------- Important Note ----------------------------------##
-## Replace the name of Cluster column as per your seurat object in calculations below ##
-##------------------------------------------------------------------------------------##
+##---------------------------------- Important Note ---------------------------------------------------------##
+## Replace the name of column in which Cell label is defined as per your seurat object in calculations       ##
+## You can do this by writing name of your seurat object followed by two square brackets as shown belowthis  ##
+## per.cc[[]]                                                                                                  ##
+##-----------------------------------------------------------------------------------------------------------##
 
 target.percc <- per.cc@meta.data
 target.percc$Class=target.percc$Cluster
