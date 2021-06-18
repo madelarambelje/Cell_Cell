@@ -14,7 +14,7 @@ source('requisites.R')
 subset1 <- readRDS('healthy_subset_natural.rds') # E.g. Healthy subset
 subset2 <- readRDS('inflamed_subset_natural.rds') # E.g. Inflamed subset
 
-DB <- "ICELLNET"
+#DB <- "ICELLNET"
 
 # Create Cellchat Objects (takes time)
 source('create_cellchat_objects.R')
