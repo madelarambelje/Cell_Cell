@@ -25,4 +25,5 @@ install_github("soumelis-lab/ICELLNET",ref="master", subdir="icellnet")
 
 # creating a dataframe of ICELLNET database creating couples based on interaction pairs present
 db=as.data.frame(read.csv(curl::curl(url="https://raw.githubusercontent.com/soumelis-lab/ICELLNET/master/data/ICELLNETdb.tsv"), sep="\t",header = T, check.names=FALSE, stringsAsFactors = FALSE, na.strings = ""))
+#Here a database couple is created based on the interaction pairs present in ICELLNET DB based on Family of molecules 
 db.name.couple=name.lr.couple(db, type="Family")
